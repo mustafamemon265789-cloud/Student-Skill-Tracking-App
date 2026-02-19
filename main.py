@@ -1,20 +1,12 @@
-import streamlit as st
-from page import student, skill, analytics
+from fastapi import FastAPI
+from app.routes import students, skills, analytics
 
-st.set_page_config(
-    page_title="Student Skills Tracker",
-    layout="wide"
-)
-st.title("Student Skills Tracker System")
-
-page = st.sidebar.selectbox(
-    "Select a page:",
-    ["Students", "Skills", "Analytics"]
+app = FastAPI(
+    title="Student Skills Tracking API",
+    description="An API for tracking student skills and progress."
 )
 
-if page == "Students":
-    student.render()
-elif page == "Skills":
-    skill.render()
-elif page == "Analytics":
-    analytics.render()
+app.include_router(students.router, prefix="/students", tags=["Students"])
+app.include_router(skills.router, prefix="/skills", tags=["Skills"])
+app.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
+
